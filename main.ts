@@ -14,6 +14,8 @@ export default class OscarsSamplePlugin extends Plugin {
 	settings: MyPluginSettings;
 
 	async onload() {
+		console.log('loading plugin');
+		
 		this.addRibbonIcon('dice', 'Greet', () => {
 			new Notice('Oscar says hi! 👋🏼');
 		});
@@ -82,7 +84,7 @@ export default class OscarsSamplePlugin extends Plugin {
 	}
 
 	onunload() {
-
+		console.log('unloading plugin');
 	}
 
 	async loadSettings() {
