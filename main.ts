@@ -18,6 +18,19 @@ export default class CountTasksPlugin extends Plugin {
 
 		await this.loadSettings();
 
+		// TODO: continue here, i can see the innerText inside the activeEditor but not the "- [ ]" to count the tasks
+		this.app.workspace.on('file-open', () => {
+			const view = this.app.workspace.getActiveViewOfType(MarkdownView);
+			const doc = view?.editor.getDoc;
+			console.log('view?.editor.getDoc ->', doc);
+
+			const editor = this.app.workspace.activeEditor?.editor;
+			console.log('activeEditor.editor ->', editor);
+
+			const activeFile = this.app.workspace.getActiveFile
+			console.log('activeFile ->', activeFile)
+		});
+
 		// This adds a status bar item to the bottom of the app. Does not work on mobile apps.
 		const statusBarItemEl = this.addStatusBarItem();
 		statusBarItemEl.setText('Status Bar Text');
