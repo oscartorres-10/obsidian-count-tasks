@@ -12,28 +12,30 @@ const DEFAULT_SETTINGS: CountTasksSettings = {
 
 export default class CountTasksPlugin extends Plugin {
 	settings: CountTasksSettings;
+	tasksCount: number = 0;
 
 	async onload() {
 		console.log('loading count tasks plugin');
 
 		await this.loadSettings();
 
-		// TODO: continue here, i can see the innerText inside the activeEditor but not the "- [ ]" to count the tasks
-		this.app.workspace.on('file-open', () => {
-			const view = this.app.workspace.getActiveViewOfType(MarkdownView);
-			const doc = view?.editor.getDoc;
-			console.log('view?.editor.getDoc ->', doc);
-
+		this.app.workspace.on('file-open', async () => {
 			const editor = this.app.workspace.activeEditor?.editor;
-			console.log('activeEditor.editor ->', editor);
-
-			const activeFile = this.app.workspace.getActiveFile
-			console.log('activeFile ->', activeFile)
+			const activeFile = this.app.workspace.getActiveFile();
+			if (editor && activeFile) {
+				const cachedRead = await this.app.vault.cachedRead(activeFile);
+				console.log('cachedRead ->', cachedRead);
+				const matchResults = cachedRead.match(/- \[ \]/g);
+				console.log('matchResults ->', matchResults);
+				this.tasksCount = matchResults?.length || 0;
+			}
+			// This adds a status bar item to the bottom of the app. Does not work on mobile apps.
+			const statusBarTasksCount = this.addStatusBarItem();
+			statusBarTasksCount.setText(`Tasks: ${this.tasksCount}`);
 		});
 
-		// This adds a status bar item to the bottom of the app. Does not work on mobile apps.
-		const statusBarItemEl = this.addStatusBarItem();
-		statusBarItemEl.setText('Status Bar Text');
+		// TODO: continue here, on editor change i need to remove the status bar item so it doesn't appear multiple times
+		// this.app.workspace.on('...');
 
 		// This adds an editor command that can perform some operation on the current editor instance
 		this.addCommand({
