@@ -1,4 +1,4 @@
-import { App, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { App, MarkdownView, Plugin, PluginSettingTab, Setting } from 'obsidian';
 
 interface CountTasksSettings {
 	mySetting: string;
@@ -19,9 +19,10 @@ export default class CountTasksPlugin extends Plugin {
 		const statusBarTasksCount = this.addStatusBarItem();
 
 		this.app.workspace.on('file-open', async () => {
-			const editor = this.app.workspace.activeEditor?.editor;
 			const activeFile = this.app.workspace.getActiveFile();
-			if (editor && activeFile) {
+			const activeView = this.app.workspace.getActiveViewOfType(MarkdownView)
+
+			if (activeView && activeFile) {
 				const cachedRead = await this.app.vault.cachedRead(activeFile);
 				const matchResults = cachedRead.match(/- \[ \]/g);
 				this.tasksCount = matchResults?.length || 0;
