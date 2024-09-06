@@ -18,6 +18,8 @@ export default class CountTasksPlugin extends Plugin {
 		console.log('loading count tasks plugin');
 
 		await this.loadSettings();
+		// This adds a status bar item to the bottom of the app. Does not work on mobile apps.
+		const statusBarTasksCount = this.addStatusBarItem();
 
 		this.app.workspace.on('file-open', async () => {
 			const editor = this.app.workspace.activeEditor?.editor;
@@ -29,13 +31,8 @@ export default class CountTasksPlugin extends Plugin {
 				console.log('matchResults ->', matchResults);
 				this.tasksCount = matchResults?.length || 0;
 			}
-			// This adds a status bar item to the bottom of the app. Does not work on mobile apps.
-			const statusBarTasksCount = this.addStatusBarItem();
 			statusBarTasksCount.setText(`Tasks: ${this.tasksCount}`);
 		});
-
-		// TODO: continue here, on editor change i need to remove the status bar item so it doesn't appear multiple times
-		// this.app.workspace.on('...');
 
 		// This adds an editor command that can perform some operation on the current editor instance
 		this.addCommand({
