@@ -15,8 +15,12 @@ export default class CountTasksPlugin extends Plugin {
 	async onload() {
 		console.log('loading count tasks plugin');
 		await this.loadSettings();
+
 		// adds a status bar item to the bottom of the app. Does not work on mobile apps.
 		const statusBarTasksCount = this.addStatusBarItem();
+		const statusBarTasksCountSpan = statusBarTasksCount.createEl('span', {
+			text: `Tasks: ${this.tasksCount}`,
+		});
 
 		this.app.workspace.on('file-open', async () => {
 			const activeFile = this.app.workspace.getActiveFile();
@@ -26,8 +30,8 @@ export default class CountTasksPlugin extends Plugin {
 				const cachedRead = await this.app.vault.cachedRead(activeFile);
 				const matchResults = cachedRead.match(/- \[ \]/g);
 				this.tasksCount = matchResults?.length || 0;
+				statusBarTasksCountSpan.setText(`Tasks: ${this.tasksCount}`);
 			}
-			statusBarTasksCount.setText(`Tasks: ${this.tasksCount}`);
 		});
 
 		// adds a settings tab so the user can configure various aspects of the plugin
