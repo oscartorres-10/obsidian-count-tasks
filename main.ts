@@ -8,6 +8,8 @@ const DEFAULT_SETTINGS: CountTasksSettings = {
 	mySetting: 'default',
 };
 
+// TODO: remove status bar item if there is no editor open
+
 export default class CountTasksPlugin extends Plugin {
 	settings: CountTasksSettings;
 	tasksCount: number = 0;
