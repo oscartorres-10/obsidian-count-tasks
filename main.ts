@@ -12,7 +12,9 @@ const DEFAULT_SETTINGS: CountTasksSettings = {
 
 export default class CountTasksPlugin extends Plugin {
 	settings: CountTasksSettings;
-	tasksCount = 0;
+  toDoTasks = 0;
+  completedTasks = 0;
+  totalTasks = 0;
 
 	async onload() {
 		console.log('loading count tasks plugin');
@@ -30,9 +32,12 @@ export default class CountTasksPlugin extends Plugin {
 
 			if (activeView && activeFile) {
 				const cachedRead = await this.app.vault.cachedRead(activeFile);
-				const matchResults = cachedRead.match(/- \[ \]/g);
-				this.tasksCount = matchResults?.length || 0;
-				statusBarTasksCountSpan.setText(`Tasks: ${this.tasksCount}`);
+        const toDoTasksMatchResults = cachedRead.match(/[-*+] \[ \]/g)
+        const completedTasksMatchResults = cachedRead.match(/[-*+] \[[xX]\]/g)
+        this.toDoTasks = toDoTasksMatchResults?.length || 0
+        this.completedTasks = completedTasksMatchResults?.length || 0
+        this.totalTasks = this.toDoTasks + this.completedTasks
+        statusBarTasksCountSpan.setText(`✓ ${this.completedTasks}/${this.totalTasks}`);
 			} else {
 				statusBarTasksCountSpan.setText(`No Tasks`);
 			}
