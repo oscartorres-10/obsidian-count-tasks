@@ -12,7 +12,7 @@ const DEFAULT_SETTINGS: CountTasksSettings = {
 
 export default class CountTasksPlugin extends Plugin {
 	settings: CountTasksSettings;
-	tasksCount: number = 0;
+	tasksCount = 0;
 
 	async onload() {
 		console.log('loading count tasks plugin');
