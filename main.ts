@@ -43,7 +43,24 @@ export default class CountTasksPlugin extends Plugin {
 			}
 		});
 
-		// adds a settings tab so the user can configure various aspects of the plugin
+    // TODO: update tasks count when a task is checked
+    // currently this executes but it's like "one step behind" it's executing when i check a task, hence when file changes, but it's not taking the latest value. e.g.: i change a tasks and cachedRead still has the empty [ ] and not [x]
+
+		// this.app.workspace.on('quick-preview', async () => {
+    //   console.log('quick-preview executed')
+		// 	const activeFile = this.app.workspace.getActiveFile();
+
+		// 	if (activeFile) {
+		// 		const cachedRead = await this.app.vault.cachedRead(activeFile);
+    //     const toDoTasksMatchResults = cachedRead.match(/[-*+] \[ \]/g)
+    //     const completedTasksMatchResults = cachedRead.match(/[-*+] \[[xX]\]/g)
+    //     this.toDoTasks = toDoTasksMatchResults?.length || 0
+    //     this.completedTasks = completedTasksMatchResults?.length || 0
+    //     this.totalTasks = this.toDoTasks + this.completedTasks
+    //     statusBarTasksCountSpan.setText(`✓ ${this.completedTasks}/${this.totalTasks}`);
+		// 	} 
+		// });
+
 		this.addSettingTab(new SampleSettingTab(this.app, this));
 	}
 
