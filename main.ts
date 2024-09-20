@@ -21,7 +21,7 @@ export default class CountTasksPlugin extends Plugin {
 		// adds a status bar item to the bottom of the app. Does not work on mobile apps.
 		const statusBarTasksCount = this.addStatusBarItem();
 		const statusBarTasksCountSpan = statusBarTasksCount.createEl('span', {
-			text: `Tasks: ${this.tasksCount}`,
+			text: ``,
 		});
 
 		this.app.workspace.on('file-open', async () => {
@@ -33,6 +33,8 @@ export default class CountTasksPlugin extends Plugin {
 				const matchResults = cachedRead.match(/- \[ \]/g);
 				this.tasksCount = matchResults?.length || 0;
 				statusBarTasksCountSpan.setText(`Tasks: ${this.tasksCount}`);
+			} else {
+				statusBarTasksCountSpan.setText(`No Tasks`);
 			}
 		});
 
